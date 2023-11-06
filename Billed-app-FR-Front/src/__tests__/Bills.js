@@ -3,11 +3,13 @@
  */
 
 import {fireEvent, screen, waitFor} from "@testing-library/dom"
-import userEvent from '@testing-library/user-event'
-import BillsUI from "../views/BillsUI.js"
+import userEvent from '@testing-library/user-event';
+import BillsUI from "../views/BillsUI.js";
+
+import mockStore from "../__mocks__/store";
 import Bills from "../containers/Bills.js";
 import { bills } from "../fixtures/bills.js"
-import { ROUTES_PATH} from "../constants/routes.js";
+import { ROUTES,ROUTES_PATH} from "../constants/routes.js";
 import {localStorageMock} from "../__mocks__/localStorage.js";
 import '@testing-library/jest-dom/extend-expect';
 
@@ -29,7 +31,7 @@ describe("Given I am connected as an employee", () => {
       window.onNavigate(ROUTES_PATH.Bills)
       await waitFor(() => screen.getByTestId('icon-window'))
       const windowIcon = screen.getByTestId('icon-window')
-      //to-do write expect expression
+      
       expect(windowIcon).toHaveClass('active-icon');
 
     })
@@ -104,5 +106,23 @@ describe("Given I am connected as an employee", () => {
       fireEvent.click(iconEye)
       expect(handleClickIconEye).toHaveBeenCalled()
     })
+    //vérifie si les factures stockées sont correctement affichées.
+    test("it should display bills", async () => {
+
+			const onNavigate = (pathname) => {                                  
+				document.body.innerHTML = ROUTES({ pathname });
+			};
+
+			const newBills = new Bills({
+				document,onNavigate,store: mockStore,localStorage: window.localStorage,
+			});
+
+			const spyGetBills = jest.spyOn(newBills, "getBills");                         
+			const displayedBills = await newBills.getBills();
+      const mockedBills = await mockStore.bills().list();                               
+
+			expect(spyGetBills).toHaveBeenCalledTimes(1);                                 
+			expect(mockedBills.length).toBe(displayedBills.length);                       // Vérifie si le nombre de factures stockées = au nombre affiché
+		});
   })
 })
