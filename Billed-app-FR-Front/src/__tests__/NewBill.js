@@ -19,7 +19,7 @@ describe("Given I am connected as an employee", () => {
     window.localStorage.setItem('user', JSON.stringify({
       type: 'Employee',
     }))
-    // créatio du root
+    // création du root
     const root = document.createElement("div")
     root.setAttribute("id", "root")
     document.body.append(root)
@@ -47,21 +47,14 @@ describe("Given I am connected as an employee", () => {
     })
 
     describe("When I upload a file", () => {
-      let handleChangeFile
-
-      beforeEach(() => {
-        handleChangeFile = jest.fn((e) => newBill.handleChangeFile(e))
-      })
       test("then handleChangeFile should be triggered ", async () => {
 
         await waitFor(() => screen.getByTestId('file'))
+
+        const handleChangeFile = jest.fn((e) => newBill.handleChangeFile(e))
         const inputFile = screen.getByTestId('file')
-
         inputFile.addEventListener('change', handleChangeFile)
-
-        
         const testFile = new File(['test'], 'test.jpg', { type: 'image/jpg' })
-
         fireEvent.change(inputFile, {target: { files: [testFile],},})
 
         // checker le nom du fichier
@@ -70,7 +63,7 @@ describe("Given I am connected as an employee", () => {
         // check si handlechangefile est appelé
         expect(handleChangeFile).toHaveBeenCalled()
 
-        // check formdata values
+        // check formdata
         expect(inputFile.files[0]).toEqual(testFile)
       })
       test("should display a file error message", () =>{
@@ -84,25 +77,25 @@ describe("Given I am connected as an employee", () => {
   
         const querySelectorSpy = jest.spyOn(newBill.document, "querySelector");
   
+        //définie le message d'erreur
         newBill.displayFileErrorMessage("Le fichier doit être au format JPG, JPEG ou PNG.");
   
-        // Verify that document.querySelector was called with the correct argument
+        // Vérifie que le .querySelector est appelé avec le bon argument.
         expect(querySelectorSpy).toHaveBeenCalledWith('[data-testid="file-error"]');
   
-        // Verify that the error message was set correctly
+        // Vérifie si le message correspond
         const fileErrorElement = newBill.document.querySelector('[data-testid="file-error"]');
         expect(fileErrorElement.textContent).toBe("Le fichier doit être au format JPG, JPEG ou PNG.");
   
-        // Restore the spy
         querySelectorSpy.mockRestore();
       })
-      
 
     })
     // POST integration test
     describe("When I click on the submit button", () => {
 
       test("then it should create a new bill", () => {
+
         const expenseTypeInput = screen.getByTestId('expense-type');
         fireEvent.change(expenseTypeInput, { target: { value: 'Transports' } });
   
@@ -113,13 +106,13 @@ describe("Given I am connected as an employee", () => {
         fireEvent.change(datePickerInput, { target: { value: '2023-10-25' } });
   
         const amountInput = screen.getByTestId('amount');
-        fireEvent.change(amountInput, { target: { value: '100' } });
+        fireEvent.change(amountInput, { target: { value: '200' } });
   
         const vatInput = screen.getByTestId('vat');
-        fireEvent.change(vatInput, { target: { value: '30' } });
+        fireEvent.change(vatInput, { target: { value: '50' } });
   
         const pctInput = screen.getByTestId('pct');
-        fireEvent.change(pctInput, { target: { value: '30' } });
+        fireEvent.change(pctInput, { target: { value: '25' } });
   
         const commentaryInput = screen.getByTestId('commentary');
         fireEvent.change(commentaryInput, { target: { value: 'test' } });
@@ -133,12 +126,12 @@ describe("Given I am connected as an employee", () => {
         expect(expenseTypeInput.value).toBe("Transports");
         expect(expenseNameInput.value).toBe("Test Expense");
         expect(datePickerInput.value).toBe("2023-10-25"); 
-        expect(datePickerInput.value).toBe("2023-10-25"); 
-        expect(datePickerInput.value).toBe("2023-10-25"); 
-        expect(datePickerInput.value).toBe("2023-10-25"); 
+        expect(amountInput.value).toBe("200"); 
+        expect(vatInput.value).toBe("50"); 
+        expect(pctInput.value).toBe("25"); 
+        expect(commentaryInput.value).toBe("test"); 
+
       })
     })
-
   })
-
 })
