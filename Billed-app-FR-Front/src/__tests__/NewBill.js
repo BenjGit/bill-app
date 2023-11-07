@@ -57,13 +57,13 @@ describe("Given I am connected as an employee", () => {
         const testFile = new File(['test'], 'test.jpg', { type: 'image/jpg' })
         fireEvent.change(inputFile, {target: { files: [testFile],},})
 
-        // checker le nom du fichier
+        // vérifie le nom du fichier
         expect(screen.getByTestId('file').files[0].name).toBe('test.jpg')
 
-        // check si handlechangefile est appelé
+        // vérifie si handlechangefile est appelé
         expect(handleChangeFile).toHaveBeenCalled()
 
-        // check formdata
+        // vérifie si les deux objets sont identiques
         expect(inputFile.files[0]).toEqual(testFile)
       })
       test("should display a file error message", () =>{
@@ -86,10 +86,7 @@ describe("Given I am connected as an employee", () => {
         // Vérifie si le message correspond
         const fileErrorElement = newBill.document.querySelector('[data-testid="file-error"]');
         expect(fileErrorElement.textContent).toBe("Le fichier doit être au format JPG, JPEG ou PNG.");
-  
-        querySelectorSpy.mockRestore();
       })
-
     })
     // POST integration test
     describe("When I click on the submit button", () => {

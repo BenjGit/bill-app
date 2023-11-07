@@ -31,7 +31,7 @@ export default class NewBill {
     formData.append('email', email)
 
     if(file.type !=='image/jpeg' && file.type !== 'image/jpg' && file.type !== 'image/png'){
-      this.displayFileErrorMessage("le fichier doit être au format Jpg, JPEG ou PNG");
+      this.displayFileErrorMessage("le fichier doit être au format JPG, JPEG ou PNG.");
       return
     }
 

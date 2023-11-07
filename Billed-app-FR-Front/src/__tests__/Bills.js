@@ -117,12 +117,12 @@ describe("Given I am connected as an employee", () => {
 				document,onNavigate,store: mockStore,localStorage: window.localStorage,
 			});
 
-			const spyGetBills = jest.spyOn(newBills, "getBills");                         
-			const displayedBills = await newBills.getBills();
-      const mockedBills = await mockStore.bills().list();                               
+			const spyGetBills = jest.spyOn(newBills, "getBills");     //créer un espion newbills                    
+			const displayedBills = await newBills.getBills();         //récupère les factures à afficher
+      const mockedBills = await mockStore.bills().list();       //récupère la liste de facture depuis le mockstore                  
 
-			expect(spyGetBills).toHaveBeenCalledTimes(1);                                 
-			expect(mockedBills.length).toBe(displayedBills.length);                       // Vérifie si le nombre de factures stockées = au nombre affiché
+			expect(spyGetBills).toHaveBeenCalledTimes(1);             //vérifie que getbills est appelé une seule fois        
+			expect(mockedBills.length).toBe(displayedBills.length);   // Vérifie si le nombre de factures stockées = au nombre affiché
 		});
   })
 })
